@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import { GithubIcon } from "../../../components/icons/SidebarIcons";
 import { getProject } from "../backend/fetchGitHubInfo";
 import Popup from "../../../components/Popup";
@@ -10,14 +12,20 @@ interface ProjectArticleProps {
   title?: string;
   description?: string;
   thumbnail?: string;
+  thumbnailZoom?: number;
+  thumbnailPosition?: string;
   githubUrl?: string;
+  renderReadmeHtml?: boolean;
 }
 
 function ProjectArticle({
   title = "Project Title",
   description,
   thumbnail,
+  thumbnailZoom = 1,
+  thumbnailPosition = "center",
   githubUrl,
+  renderReadmeHtml = false,
 }: ProjectArticleProps) {
   const [repoDescription, setRepoDescription] = useState<string>();
   const [readme, setReadme] = useState<string | null>(null);
@@ -53,7 +61,14 @@ function ProjectArticle({
             <img
               src={thumbnail}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              // Allows me to zoom the picture through the properties
+              style={
+                {
+                  "--thumb-zoom": thumbnailZoom,
+                  objectPosition: thumbnailPosition,
+                } as React.CSSProperties
+              }
+              className="w-full h-full object-contain scale-[var(--thumb-zoom)] group-hover:scale-[calc(var(--thumb-zoom)*1.05)] transition-transform duration-300"
             />
           ) : (
             <div className="flex justify-center items-center bg-(--mainBGAccent) w-full h-full text-gray-500 text-sm">
@@ -97,18 +112,34 @@ function ProjectArticle({
       {popupShown && (
         <Popup setHelpShown={setPopupShown} title={title} className="max-w-5xl">
           {thumbnail && (
-            <img
-              src={thumbnail}
-              alt={title}
-              className="mb-3 rounded-md w-full h-40 object-cover shrink-0"
-            />
+            <div className="mb-3 rounded-md w-full h-40 overflow-hidden shrink-0">
+              <img
+                src={thumbnail}
+                alt={title}
+                style={
+                  {
+                    "--thumb-zoom": thumbnailZoom,
+                    objectPosition: thumbnailPosition,
+                  } as React.CSSProperties
+                }
+                className="w-full h-full object-contain scale-[var(--thumb-zoom)]"
+              />
+            </div>
           )}
           {!readme && repoDescription && (
             <p className="mb-4 text-gray-300">{repoDescription}</p>
           )}
           {readme && (
             <div className="prose-pre:bg-black/40 prose-invert mb-4 max-w-none prose-code:text-red-300 prose prose-sm">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={
+                  renderReadmeHtml ? [rehypeRaw, rehypeSanitize] : []
+                }
+                remarkRehypeOptions={
+                  renderReadmeHtml ? { allowDangerousHtml: true } : undefined
+                }
+              >
                 {readme}
               </ReactMarkdown>
             </div>

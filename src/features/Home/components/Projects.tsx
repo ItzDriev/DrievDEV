@@ -1,5 +1,6 @@
 import ProjectArticle from "./ProjectArticle";
 import DrievEssentialsThumbnail from "../../../assets/kokushibo.png";
+import Brogrss from "../../../assets/Brogress2.png";
 
 function Projects() {
   return (
@@ -11,8 +12,15 @@ function Projects() {
             title="Driev's Essentials"
             githubUrl="https://github.com/ItzDriev/Driev-s-Essentials"
             thumbnail={DrievEssentialsThumbnail}
+            thumbnailZoom={1.5}
           />
-          <ProjectArticle />
+          <ProjectArticle
+            title="Brogress"
+            githubUrl="https://github.com/Flurry2005/Brogress"
+            thumbnail={Brogrss}
+            thumbnailPosition="center"
+            renderReadmeHtml
+          />
           <ProjectArticle />
         </section>
       </div>

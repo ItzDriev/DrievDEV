@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --navBG: rgba(36, 38, 58);
+  --mainBG: rgba(25, 28, 43);
+  --mainBGAccent: rgb(19, 23, 37);
+  --alternating1: rgb(27, 28, 43);
+  --alternating2: rgb(23, 25, 39);
+}
+
+@theme {
+  --font-montserrat: "Montserrat", sans-serif;
+}
+
+/* Faint red glow (matching the site's red-500 accent) + subtle noise grain over the flat --mainBG color */
+.bg-aurora {
+  background-image:
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(239, 68, 68, 0.1) 0%,
+      rgba(239, 68, 68, 0.04) 30%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 80% 95%,
+      rgba(239, 68, 68, 0.08) 0%,
+      rgba(239, 68, 68, 0.03) 30%,
+      transparent 60%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size:
+    100% 100%,
+    100% 100%,
+    180px 180px;
+}
+
+/*Rotating border animation*/
+@property --border-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: "<angle>";
+}
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+.animate-border {
+  animation: border-rotate 4s linear infinite;
+
+  /* background uses the element's current bg color */
+  background:
+    linear-gradient(45deg, #ffffff, #e7e7e7 50%, #ffffff) padding-box,
+    conic-gradient(
+        from var(--border-angle),
+        transparent 40%,
+        rgba(220, 38, 38, 0.5) 84%,
+        rgba(239, 68, 68, 0.6) 88%,
+        #ef4444 90%,
+        rgba(239, 68, 68, 0.6) 92%,
+        transparent 100%
+      )
+      border-box;
+
+  border: 4px solid transparent;
+  z-index: 2;
+}
+
+/*Fade IN animation*/
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.08s ease-in forwards;
+}
+
+@utility bg-p1-darkest {
+  background-color: #000105;
+}
+@utility bg-palette1-dark {
+  background-color: #0c0c13;
+}
+@utility bg-palette1-gray {
+  background-color: #000512;
+}
+@utility bg-palette1-red {
+  background-color: #100107;
+}
+@utility bg-palette1-dark-red {
+  background-color: #100406;
+}
+
+/*Themed scrollbar for scrollable content areas (e.g. the Popup body)*/
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(239, 68, 68, 0.5) var(--mainBGAccent);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--mainBGAccent);
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(239, 68, 68, 0.5);
+  border-radius: 999px;
+  border: 2px solid var(--mainBGAccent);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+details {
+  max-width: 500px;
+  overflow: hidden; /* Keep this line to prevent an odd blue outline around the element in Safari. */
+}
+
+summary {
+  display: block;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+span.details-span {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--navBG);
+  color: #fff;
+  height: 4rem;
+}
+
+span.details-span:hover {
+  cursor: pointer;
+}
+
+span.details-span > i {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+  transition: rotate 200ms 200ms ease-out;
+}
+
+div.content {
+  box-sizing: border-box;
+  max-width: 500px;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 10px;
+  transition:
+    max-height 200ms ease-out,
+    border 0ms 200ms linear;
+}
+
+details[open] + div.content {
+  max-height: 800px; /* Set a max-height value enough to show all the content */
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  border-color: var(--navBG);
+  transition:
+    max-height 400ms ease-out,
+    border 0ms linear;
+}
+
+details[open] span.details-span > i {
+  rotate: 90deg;
+  transition: rotate 200ms ease-out;
+}

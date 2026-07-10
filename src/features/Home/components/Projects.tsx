@@ -1,6 +1,7 @@
 import ProjectArticle from "./ProjectArticle";
 import DrievEssentialsThumbnail from "../../../assets/kokushibo.png";
 import Brogrss from "../../../assets/Brogress2.png";
+import DrievDEV from "../../../assets/DrievDEV.png";
 
 function Projects() {
   return (
@@ -21,7 +22,11 @@ function Projects() {
             thumbnailPosition="center"
             renderReadmeHtml
           />
-          <ProjectArticle />
+          <ProjectArticle
+            title="DrievDEV"
+            thumbnail={DrievDEV}
+            githubUrl="https://github.com/ItzDriev/DrievDEV"
+          />
         </section>
       </div>
     </section>

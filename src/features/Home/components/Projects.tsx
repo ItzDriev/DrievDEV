@@ -1,7 +1,7 @@
 import ProjectArticle from "./ProjectArticle";
 import DrievEssentialsThumbnail from "../../../assets/kokushibo.png";
 import Brogrss from "../../../assets/Brogress2.png";
-import DrievDEV from "../../../assets/DrievDEV.png";
+import AntonSquare from "../../../assets/AntonMonkeySquare.png";
 
 function Projects() {
   return (
@@ -24,7 +24,8 @@ function Projects() {
           />
           <ProjectArticle
             title="DrievDEV"
-            thumbnail={DrievDEV}
+            thumbnail={AntonSquare}
+            thumbnailZoom={1.2}
             githubUrl="https://github.com/ItzDriev/DrievDEV"
           />
         </section>
